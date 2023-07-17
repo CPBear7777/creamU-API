@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using creamU_API.Entities;
+using creamU_API.Entities.DTO;
+
 
 namespace creamU_API.Controllers
 {
@@ -22,13 +24,21 @@ namespace creamU_API.Controllers
 
         // GET: api/Components
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Component>>> GetComponents()
+        public async Task<ActionResult<IEnumerable<ComponentDTO>>> GetComponents()
         {
           if (_context.Components == null)
           {
               return NotFound();
           }
-            return await _context.Components.ToListAsync();
+            var componentDTO = await _context.Components.Select(c => new ComponentDTO
+            {
+                ComponentId = c.ComponentId,
+                ModelId = c.ModelId,
+                MaterialId = c.MaterialId,
+                ModelType = c.ModelType
+            }).ToListAsync();
+            return componentDTO;
+            //return await _context.Components.ToListAsync();
         }
 
         // GET: api/Components/5
