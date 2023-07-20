@@ -9,6 +9,7 @@ using creamU_API.Entities;
 using creamU_API.Entities.DTO;
 
 
+
 namespace creamU_API.Controllers
 {
     [Route("api/[controller]")]
@@ -41,6 +42,25 @@ namespace creamU_API.Controllers
             //return await _context.Components.ToListAsync();
         }
 
+        [HttpGet]
+        [Route("model/{modelId}/material/{materialId}")]
+        public async Task<ActionResult<IEnumerable<ComponentDTO>>> GetComponents(int modelId, int materialId)
+        {
+            // 假設 components 的 modelId 和 materialId 分別對應至 model 和 material 的 id 屬性
+                
+            var componentDTO = await _context.Components
+            .Where(c => c.ModelId == modelId && c.MaterialId == materialId)
+            .Select(c => new ComponentDTO
+            {
+                ComponentId = c.ComponentId,
+                MaterialId = c.MaterialId,
+                ModelId = c.ModelId,
+                ModelType = c.ModelType
+            }).ToListAsync();
+
+            return componentDTO;
+        }
+        
         // GET: api/Components/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Component>> GetComponent(int id)
