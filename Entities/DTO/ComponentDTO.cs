@@ -7,5 +7,6 @@
         public string? ModelType { get; set; }
         public int? MaterialId { get; set; }
         
+
     }
 }
