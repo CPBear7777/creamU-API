@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using creamU_API.Entities;
+using creamU_API.Entities.DTO;
+using System.Text.Json;
 
 namespace creamU_API.Controllers
 {
@@ -97,17 +99,41 @@ namespace creamU_API.Controllers
 
         // POST: api/CombineDetails
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<CombineDetail>> PostCombineDetail(CombineDetail combineDetail)
+        [HttpGet]
+        [Route("/api/saveCombineDetail")]
+        public async Task<string> saveCombineDetail(string? combineDetail)
         {
-          if (_context.CombineDetails == null)
-          {
-              return Problem("Entity set 'CreamUDBContext.CombineDetails'  is null.");
-          }
-            _context.CombineDetails.Add(combineDetail);
-            await _context.SaveChangesAsync();
+            if (combineDetail == null || combineDetail.Length == 0)
+            {
+                return "No data received.";
+            }
+            try
+            {
+                List<CombineDetailDTO> CDs = JsonSerializer.Deserialize<List<CombineDetailDTO>>(combineDetail);
+                //CombineDetailDTO CDs = JsonSerializer.Deserialize<CombineDetailDTO>(combineDetail);
 
-            return CreatedAtAction("GetCombineDetail", new { id = combineDetail.CombineId }, combineDetail);
+                foreach(var item in CDs)
+                {
+                    CombineDetail CD = new CombineDetail();
+                    CD.Chead = Convert.ToInt32(item.Chead);
+                    CD.Cbody = Convert.ToInt32(item.Cbody);
+                    CD.Crhand = Convert.ToInt32(item.Crhand);
+                    CD.Clhand = Convert.ToInt32(item.Clhand);
+                    CD.Crfoot = Convert.ToInt32(item.Crfoot);
+                    CD.Clfoot = Convert.ToInt32(item.Clfoot);
+                    CD.SubTotal = Convert.ToInt32(item.SubTotal);
+                    CD.Type = Convert.ToString(item.Type);
+                    Console.WriteLine(CD);
+                    _context.CombineDetails.Add(CD);
+                }
+                    _context.SaveChanges();
+
+                return "ok";
+            }
+            catch(Exception ex)
+            {
+                return "fail";
+            }
         }
 
         // DELETE: api/CombineDetails/5

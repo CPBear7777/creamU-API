@@ -2,15 +2,15 @@
 {
     public class CombineDetailDTO
     {
-        public int CombineId { get; set; }
-        public int? Chead { get; set; }
-        public int? Cbody { get; set; }
-        public int? Clhand { get; set; }
-        public int? Crhand { get; set; }
-        public int? Clfoot { get; set; }
-        public int? Crfoot { get; set; }
-        public int? SubTotal { get; set; }
-        public string? Type { get; set; }
+        public string CombineId { get; set; }
+        public decimal? Chead { get; set; }
+        public decimal? Cbody { get; set; }
+        public decimal? Clhand { get; set; }
+        public decimal? Crhand { get; set; }
+        public decimal? Clfoot { get; set; }
+        public decimal? Crfoot { get; set; }
+        public decimal? SubTotal { get; set; }
+        public decimal? Type { get; set; }
 
         public virtual Component? CbodyNavigation { get; set; }
         public virtual Component? CheadNavigation { get; set; }
